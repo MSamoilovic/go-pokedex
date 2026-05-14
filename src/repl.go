@@ -7,16 +7,23 @@ import (
 	"strings"
 	"time"
 
-	pokeApi "go-pokedex/src/internal/pokeApi"
 	pokeCache "go-pokedex/src/internal/pokeCache"
 )
 
 
 func repl() {
 	scanner := bufio.NewScanner(os.Stdin)
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		home = "."
+	}
+	savePath := home + "/.go-pokedex.json"
+
 	config := config{
-		Cache:   pokeCache.NewCache(5 * time.Minute),
-		Pokedex: map[string]pokeApi.Pokemon{},
+		Cache:    pokeCache.NewCache(5 * time.Minute),
+		Pokedex:  loadPokedex(savePath),
+		SavePath: savePath,
 	}
 
 	for {

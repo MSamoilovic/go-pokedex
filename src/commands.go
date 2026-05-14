@@ -17,10 +17,11 @@ type cliCommand struct {
 }
 
 type config struct {
-	Next    string
-	Prev    string
-	Cache   *pokeCache.Cache
-	Pokedex map[string]pokeApi.Pokemon
+	Next     string
+	Prev     string
+	Cache    *pokeCache.Cache
+	Pokedex  map[string]pokeApi.Pokemon
+	SavePath string
 }
 
 func getCommands() map[string]cliCommand {
@@ -137,6 +138,9 @@ func commandCatch(config *config, args []string) error {
 	if rand.Intn(pokemon.BaseExperience+1) < 50 {
 		fmt.Printf("%s was caught!\n", name)
 		config.Pokedex[name] = pokemon
+		if err := savePokedex(config.SavePath, config.Pokedex); err != nil {
+			fmt.Printf("Warning: could not save Pokedex: %v\n", err)
+		}
 	} else {
 		fmt.Printf("%s escaped!\n", name)
 	}
