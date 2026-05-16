@@ -61,11 +61,6 @@ func getCommands() map[string]cliCommand {
 			description: "Inspect a caught Pokemon",
 			callback:    commandInspect,
 		},
-		"release": {
-			name:        "release",
-			description: "Release a caught Pokemon",
-			callback:    commandRelease,
-		},
 		"pokedex": {
 			name:        "pokedex",
 			description: "List all caught Pokemon",
@@ -149,26 +144,6 @@ func commandCatch(config *config, args []string) error {
 	} else {
 		fmt.Printf("%s escaped!\n", name)
 	}
-
-	return nil
-}
-
-func commandRelease(config *config, args []string) error {
-	if len(args) == 0 {
-		return errors.New("usage: release <pokemon>")
-	}
-
-	name := args[0]
-	if _, ok := config.Pokedex[name]; !ok {
-		fmt.Printf("you don't have %s in your Pokedex\n", name)
-		return nil
-	}
-
-	delete(config.Pokedex, name)
-	if err := savePokedex(config.SavePath, config.Pokedex); err != nil {
-		fmt.Printf("Warning: could not save Pokedex: %v\n", err)
-	}
-	fmt.Printf("%s was released!\n", name)
 
 	return nil
 }
