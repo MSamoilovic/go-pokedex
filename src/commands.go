@@ -138,16 +138,16 @@ func commandCatch(config *config, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Throwing a Pokeball at %s...\n", name)
+	fmt.Printf("%s\n", colorize(colorYellow, "Throwing a Pokeball at "+name+"..."))
 
 	if rand.Intn(pokemon.BaseExperience+1) < 50 {
-		fmt.Printf("%s was caught!\n", name)
+		fmt.Printf("%s\n", colorize(colorGreen, colorBold+name+" was caught!"))
 		config.Pokedex[name] = pokemon
 		if err := savePokedex(config.SavePath, config.Pokedex); err != nil {
 			fmt.Printf("Warning: could not save Pokedex: %v\n", err)
 		}
 	} else {
-		fmt.Printf("%s escaped!\n", name)
+		fmt.Printf("%s\n", colorize(colorRed, name+" escaped!"))
 	}
 
 	return nil
@@ -184,16 +184,16 @@ func commandInspect(config *config, args []string) error {
 		return nil
 	}
 
-	fmt.Printf("Name: %s\n", pokemon.Name)
+	fmt.Printf("Name: %s\n", colorize(colorBold, pokemon.Name))
 	fmt.Printf("Height: %d\n", pokemon.Height)
 	fmt.Printf("Weight: %d\n", pokemon.Weight)
 	fmt.Println("Stats:")
 	for _, s := range pokemon.Stats {
-		fmt.Printf("  -%s: %d\n", s.Stat.Name, s.BaseStat)
+		fmt.Printf("  -%s: %s\n", s.Stat.Name, colorize(colorYellow, fmt.Sprintf("%d", s.BaseStat)))
 	}
 	fmt.Println("Types:")
 	for _, t := range pokemon.Types {
-		fmt.Printf("  - %s\n", t.Type.Name)
+		fmt.Printf("  - %s\n", typeColor(t.Type.Name))
 	}
 
 	return nil
@@ -223,10 +223,10 @@ func commandExplore(config *config, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Exploring %s...\n", args[0])
+	fmt.Printf("Exploring %s...\n", colorize(colorCyan, args[0]))
 	fmt.Println("Found Pokemon:")
 	for _, encounter := range resp.PokemonEncounters {
-		fmt.Printf(" - %s\n", encounter.Pokemon.Name)
+		fmt.Printf(" - %s\n", colorize(colorGreen, encounter.Pokemon.Name))
 	}
 
 	return nil
