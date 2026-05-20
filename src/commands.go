@@ -195,6 +195,14 @@ func commandInspect(config *config, args []string) error {
 	for _, t := range pokemon.Types {
 		fmt.Printf("  - %s\n", typeColor(t.Type.Name))
 	}
+	fmt.Println("Abilities:")
+	for _, a := range pokemon.Abilities {
+		if a.IsHidden {
+			fmt.Printf("  - %s %s\n", colorize(colorMagenta, a.Ability.Name), colorize(colorWhite, "(hidden)"))
+		} else {
+			fmt.Printf("  - %s\n", colorize(colorCyan, a.Ability.Name))
+		}
+	}
 
 	return nil
 }

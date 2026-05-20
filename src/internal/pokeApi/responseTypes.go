@@ -34,4 +34,10 @@ type Pokemon struct {
 			Name string `json:"name"`
 		} `json:"type"`
 	} `json:"types"`
+	Abilities []struct {
+		Ability struct {
+			Name string `json:"name"`
+		} `json:"ability"`
+		IsHidden bool `json:"is_hidden"`
+	} `json:"abilities"`
 }
